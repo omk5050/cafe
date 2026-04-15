@@ -13,6 +13,22 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const path = require('path');
+
+// Serve specific static asset folders to prevent exposing backend code
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/js', express.static(path.join(__dirname, 'js')));
+app.use('/admin', express.static(path.join(__dirname, 'admin')));
+
+// Serve specific HTML pages directly
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/contacts.html', (req, res) => res.sendFile(path.join(__dirname, 'contacts.html')));
+app.get('/about-us.html', (req, res) => res.sendFile(path.join(__dirname, 'about-us.html')));
+
+
 app.get('/api', (req, res) => {
   res.json({ message: 'PizzaHouse API Running' });
 });
