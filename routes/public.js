@@ -8,6 +8,7 @@ const Contact = require('../models/Contact');
 const Newsletter = require('../models/Newsletter');
 const Menu = require('../models/Menu');
 const Team = require('../models/Team');
+const Testimonial = require('../models/Testimonial');
 
 // Rate limit middleware: max 5 requests per hour
 const publicRateLimiter = rateLimit({
@@ -39,7 +40,16 @@ router.get('/team', async (req, res) => {
   }
 });
 
-// @route   POST /api/public/book
+// @route   GET /api/public/testimonials — No auth required
+router.get('/testimonials', async (req, res) => {
+  try {
+    const items = await Testimonial.find().sort({ createdAt: -1 });
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.post('/book', async (req, res) => {
   try {
     const { name, email, service, message } = req.body;

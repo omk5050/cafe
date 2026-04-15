@@ -121,7 +121,36 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Error fetching menu:', err));
     }
 
-    // 5. Fetch Team
+    // 5. Fetch Testimonials
+    const testimonialsCarousel = document.getElementById('testimonials-carousel');
+    if (testimonialsCarousel) {
+        fetch(`${API_BASE_URL}/api/public/testimonials`)
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+            })
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    testimonialsCarousel.innerHTML = data.map(t => `
+                        <article class="quote-tara">
+                            <div class="quote-tara-caption">
+                                <div class="quote-tara-text">
+                                    <p class="q">${t.quote}</p>
+                                </div>
+                                <div class="quote-tara-figure">
+                                    <img src="${t.imageUrl}" alt="${t.clientName}" width="115" height="115" style="object-fit:cover; border-radius:50%;"/>
+                                </div>
+                            </div>
+                            <h6 class="quote-tara-author">${t.clientName}</h6>
+                            <div class="quote-tara-status">${t.clientRole}</div>
+                        </article>
+                    `).join('');
+                }
+            })
+            .catch(err => console.error('Error fetching testimonials:', err));
+    }
+
+    // 6. Fetch Team
     const teamGrid = document.getElementById('team-grid');
     if (teamGrid) {
         fetch(`${API_BASE_URL}/api/public/team`)
