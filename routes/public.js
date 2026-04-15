@@ -18,7 +18,8 @@ const publicRateLimiter = rateLimit({
 });
 
 // Rate limiter applies to form submission routes ONLY (not reads)
-router.post('*', publicRateLimiter);
+// Note: Express 5 does not support bare '*' wildcards in path-to-regexp v8.
+// Rate limiter is applied individually to each POST route below.
 
 // @route   GET /api/public/menu — No auth required (public storefront)
 router.get('/menu', async (req, res) => {
@@ -50,7 +51,7 @@ router.get('/testimonials', async (req, res) => {
   }
 });
 
-router.post('/book', async (req, res) => {
+router.post('/book', publicRateLimiter, async (req, res) => {
   try {
     const { name, email, service, message } = req.body;
     const newBooking = new Booking({ name, email, service, message });
@@ -64,7 +65,7 @@ router.post('/book', async (req, res) => {
 });
 
 // @route   POST /api/public/contact
-router.post('/contact', async (req, res) => {
+router.post('/contact', publicRateLimiter, async (req, res) => {
   try {
     const { name, email, phone, service, message } = req.body;
     const newContact = new Contact({ name, email, phone, service, message });
@@ -78,7 +79,7 @@ router.post('/contact', async (req, res) => {
 });
 
 // @route   POST /api/public/subscribe
-router.post('/subscribe', async (req, res) => {
+router.post('/subscribe', publicRateLimiter, async (req, res) => {
   try {
     const { email } = req.body;
     const newSubscription = new Newsletter({ email });
