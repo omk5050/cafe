@@ -368,6 +368,8 @@
             <div class="items-grid" id="menu-grid">
                 <!-- Dynamically populated -->
             </div>
+        </div>
+
         <!-- Team Manager View -->
         <div id="team-manager-view" class="view-section">
             <div class="admin-form">
@@ -433,7 +435,7 @@
         <!-- Bookings View -->
         <div id="bookings-view" class="view-section">
             <h3 style="margin-bottom: 20px;">Recent Bookings</h3>
-            <div class="items-grid" id="bookings-grid">
+            <div class="items-grid" id="bookings-container">
                 <!-- Dynamically populated -->
             </div>
         </div>
@@ -441,7 +443,7 @@
         <!-- Contacts View -->
         <div id="contacts-view" class="view-section">
             <h3 style="margin-bottom: 20px;">Contact Messages</h3>
-            <div class="items-grid" id="contacts-grid">
+            <div class="items-grid" id="contacts-container">
                 <!-- Dynamically populated -->
             </div>
         </div>
@@ -449,7 +451,7 @@
         <!-- Newsletter View -->
         <div id="newsletter-view" class="view-section">
             <h3 style="margin-bottom: 20px;">Newsletter Subscriptions</h3>
-            <div class="items-grid" id="newsletter-grid">
+            <div class="items-grid" id="newsletter-container">
                 <!-- Dynamically populated -->
             </div>
         </div>
@@ -764,12 +766,15 @@
 
         // === READ-ONLY LOGIC ===
         async function fetchBookings() {
+            console.log('Fetching Bookings...');
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/bookings`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const data = await res.json();
-                const grid = document.getElementById('bookings-grid');
+                console.log('Data received:', data);
+                const container = document.getElementById('bookings-container');
                 if (res.ok) {
-                    grid.innerHTML = data.map(item => `
+                    if (!data.length) { container.innerHTML = '<p style="color:var(--text-muted)">No bookings yet.</p>'; return; }
+                    container.innerHTML = data.map(item => `
                         <div class="item-card" style="padding:20px;">
                             <h4 class="item-card-title">${item.name}</h4>
                             <div style="font-size:13px; color:var(--primary); margin-bottom:10px;">Service: ${item.service}</div>
@@ -778,17 +783,22 @@
                             <div style="font-size:11px; color:#666; margin-top:10px;">Date: ${new Date(item.createdAt).toLocaleString()}</div>
                         </div>
                     `).join('');
+                } else {
+                    console.error('Bookings API error:', data);
                 }
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error('fetchBookings failed:', err); }
         }
 
         async function fetchContacts() {
+            console.log('Fetching Contacts...');
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/contacts`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const data = await res.json();
-                const grid = document.getElementById('contacts-grid');
+                console.log('Data received:', data);
+                const container = document.getElementById('contacts-container');
                 if (res.ok) {
-                    grid.innerHTML = data.map(item => `
+                    if (!data.length) { container.innerHTML = '<p style="color:var(--text-muted)">No contacts yet.</p>'; return; }
+                    container.innerHTML = data.map(item => `
                         <div class="item-card" style="padding:20px;">
                             <h4 class="item-card-title">${item.name}</h4>
                             <div style="font-size:13px; color:var(--primary); margin-bottom:5px;">Service: ${item.service || 'N/A'}</div>
@@ -797,17 +807,22 @@
                             <div style="font-size:11px; color:#666; margin-top:10px;">Date: ${new Date(item.createdAt).toLocaleString()}</div>
                         </div>
                     `).join('');
+                } else {
+                    console.error('Contacts API error:', data);
                 }
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error('fetchContacts failed:', err); }
         }
 
         async function fetchNewsletter() {
+            console.log('Fetching Newsletter...');
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/newsletter`, { headers: { 'Authorization': `Bearer ${token}` } });
                 const data = await res.json();
-                const grid = document.getElementById('newsletter-grid');
+                console.log('Data received:', data);
+                const container = document.getElementById('newsletter-container');
                 if (res.ok) {
-                    grid.innerHTML = data.map(item => `
+                    if (!data.length) { container.innerHTML = '<p style="color:var(--text-muted)">No subscribers yet.</p>'; return; }
+                    container.innerHTML = data.map(item => `
                         <div class="item-card" style="padding:20px; display:flex; flex-direction:row; justify-content:space-between; align-items:center;">
                             <div>
                                 <h4 style="margin:0; font-size:15px; font-weight:500;">${item.email}</h4>
@@ -816,8 +831,10 @@
                             <span style="background:rgba(255,90,95,0.1); color:var(--primary); padding:6px 10px; border-radius:4px; font-size:12px; font-weight:600;">ACTIVE</span>
                         </div>
                     `).join('');
+                } else {
+                    console.error('Newsletter API error:', data);
                 }
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error('fetchNewsletter failed:', err); }
         }
     </script>
 </body>
