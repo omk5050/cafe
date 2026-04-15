@@ -5,60 +5,58 @@ const Booking = require('./models/Booking');
 const Contact = require('./models/Contact');
 const Newsletter = require('./models/Newsletter');
 
+const bookings = [
+  { name: 'James Carter',    email: 'j.carter@mail.com',    service: 'Dine-In',  message: 'Could we have a booth near the window? It\'s our anniversary.' },
+  { name: 'Sofia Rossi',     email: 'sofia.r@outlook.com',  service: 'Dine-In',  message: 'Party of 5 including one high chair needed.' },
+  { name: 'Marcus Webb',     email: 'marcusw@gmail.com',    service: 'Takeaway', message: 'Extra jalapeños on everything, please.' },
+  { name: 'Priya Sharma',    email: 'priya.s@india.in',     service: 'Dine-In',  message: 'One guest has a gluten intolerance, please advise.' },
+  { name: 'Liam O\'Brien',   email: 'liam.ob@domain.ie',    service: 'Dine-In',  message: '' },
+  { name: 'Yuki Tanaka',     email: 'y.tanaka@jpmail.jp',   service: 'Takeaway', message: 'Picking up at 7:30 PM sharp.' },
+  { name: 'Fatima Al-Amin',  email: 'fatima.aa@emial.ae',   service: 'Dine-In',  message: 'Halal options only, please.' },
+  { name: 'Noah Williams',   email: 'noah.w@startup.com',   service: 'Dine-In',  message: 'Corporate lunch for 8 people.' },
+];
+
+const contacts = [
+  { name: 'Grace Thompson',   email: 'grace.t@weddings.com',  phone: '555-0198', service: 'Catering',       message: 'We are looking to cater a wedding of around 80 guests next spring. Can you provide a quote?' },
+  { name: 'Derek Holland',    email: 'd.holland@corp.net',     phone: '555-0247', service: 'Private Event',  message: 'Interested in booking the restaurant exclusively for a Friday evening corporate event.' },
+  { name: 'Angela Müller',    email: 'a.muller@berlin.de',     phone: '555-0313', service: 'General',        message: 'Do you deliver to the downtown area after 10 PM?' },
+  { name: 'Tom Bradley',      email: 'tbradley@foodie.co',     phone: '555-0422', service: 'Feedback',       message: 'The Truffle Mushroom pizza was absolutely incredible last week. Will definitely be back!' },
+  { name: 'Isabella Ferreira',email: 'isa.ferreira@email.br', phone: '555-0561', service: 'Private Event',  message: 'Planning a 30th birthday dinner for 20 guests. Would love a dedicated server.' },
+];
+
+// 10 newsletter subscribers
+const newsletters = Array.from({ length: 10 }, (_, i) => ({
+  email: `subscriber${i + 1}@pizzafans.com`,
+  isVerified: true,
+}));
+
 const seedDB = async () => {
-    try {
-        console.log('Connecting to MongoDB...');
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log('Connected.');
+  try {
+    console.log('🔌 Connecting to MongoDB...');
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('✅ Connected.');
 
-        console.log('Clearing existing documents...');
-        await Booking.deleteMany({});
-        await Contact.deleteMany({});
-        await Newsletter.deleteMany({});
-        console.log('Collections cleared.');
+    console.log('🗑  Clearing existing data...');
+    await Promise.all([
+      Booking.deleteMany({}),
+      Contact.deleteMany({}),
+      Newsletter.deleteMany({}),
+    ]);
+    console.log('   Collections cleared.');
 
-        console.log('Generating seed data...');
+    console.log('🌱 Inserting seed data...');
+    await Promise.all([
+      Booking.insertMany(bookings),
+      Contact.insertMany(contacts),
+      Newsletter.insertMany(newsletters),
+    ]);
 
-        // 10 Bookings
-        const bookingsData = [
-            { name: "John Doe", email: "john.doe@example.com", service: "Dine-In", message: "Table by the window if possible." },
-            { name: "Sarah Smith", email: "sarahS@gmail.com", service: "Dine-In", message: "Anniversary dinner!" },
-            { name: "Mike Johnson", email: "mike.j90@test.com", service: "Takeaway", message: "I'll be there at 7." },
-            { name: "Emily Clark", email: "emily.clark@outlook.com", service: "Dine-In", message: "High chair needed please." },
-            { name: "Robert Wilson", email: "rob.wils@domain.com", service: "Takeaway", message: "Extra spicy pizzas please." },
-            { name: "Jessica Brown", email: "jessb@webmail.com", service: "Dine-In", message: "Can we get the corner booth?" },
-            { name: "David Taylor", email: "dtaylor@business.com", service: "Dine-In", message: "" },
-            { name: "Emma Anderson", email: "emma.anderson12@example.com", service: "Takeaway", message: "Order for Emma." },
-            { name: "James Thomas", email: "j.thomas88@testmail.com", service: "Dine-In", message: "Allergic to nuts." },
-            { name: "Olivia Martinez", email: "olivia.m@startup.io", service: "Dine-In", message: "Party of 6." }
-        ];
-
-        // 5 Contacts
-        const contactsData = [
-            { name: "Alice Green", email: "alice.g@events.com", phone: "555-0101", service: "Catering", message: "What are your rates for a wedding of 50 people?" },
-            { name: "Brian White", email: "brian.white@office.com", phone: "555-0202", service: "Private Event", message: "Looking to rent out the back room for a corporate retreat next Friday." },
-            { name: "Chloe Adams", email: "chloe.a@school.edu", phone: "555-0303", service: "General Inquiry", message: "Do you offer student discounts?" },
-            { name: "Daniel Baker", email: "d.baker@chef.org", phone: "555-0404", service: "Feedback", message: "The crust on your Margherita was fantastic yesterday." },
-            { name: "Evelyn Carter", email: "evelyn.c@music.net", phone: "555-0505", service: "Private Event", message: "Can we host a live band acoustic night at your venue?" }
-        ];
-
-        // 12 Newsletters
-        const newslettersData = Array.from({ length: 12 }, (_, i) => ({ email: `subscriber${i + 1}@pizzafans.com`, isVerified: true }));
-
-        console.log('Inserting Bookings...');
-        await Booking.insertMany(bookingsData);
-        console.log('Inserting Contacts...');
-        await Contact.insertMany(contactsData);
-        console.log('Inserting Newsletters...');
-        await Newsletter.insertMany(newslettersData);
-
-        console.log('Seed database completed successfully.');
-        process.exit(0);
-
-    } catch (err) {
-        console.error('Error seeding database:', err);
-        process.exit(1);
-    }
+    console.log(`✅ Seeded  ${bookings.length} bookings, ${contacts.length} contacts, ${newsletters.length} newsletter subscribers.`);
+    process.exit(0);
+  } catch (err) {
+    console.error('❌ Seed failed:', err.message);
+    process.exit(1);
+  }
 };
 
 seedDB();
