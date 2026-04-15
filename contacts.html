@@ -188,7 +188,7 @@
           <div class="row row-60 justify-content-center">
             <div class="col-lg-8">
               <h4 class="text-spacing-25 text-transform-none">Get in Touch</h4>
-              <form class="rd-form rd-mailform" data-form-output="form-output-global" data-form-type="contact" method="post" action="bat/rd-mailform.php">
+              <form id="contact-form" class="rd-form rd-mailform">
                 <div class="row row-20 gutters-20">
                   <div class="col-md-6">
                     <div class="form-wrap">
@@ -205,7 +205,7 @@
                   <div class="col-md-6">
                     <div class="form-wrap">
                       <!--Select 2-->
-                      <select class="form-input" data-minimum-results-for-search="Infinity" data-constraints="@Required">
+                      <select class="form-input" name="service" data-minimum-results-for-search="Infinity" data-constraints="@Required">
                         <option value="1">Select a Service</option>
                         <option value="2">Dine-In</option>
                         <option value="3">Carry-Out</option>
@@ -300,7 +300,7 @@
                 <h5 class="footer-modern-title oh-desktop"><span class="d-inline-block wow slideInLeft">Newsletter</span></h5>
                 <p class="wow fadeInRight">Sign up today for the latest news and updates.</p>
                 <!-- RD Mailform-->
-                <form class="rd-form rd-mailform rd-form-inline rd-form-inline-sm oh-desktop" data-form-output="form-output-global" data-form-type="subscribe" method="post" action="bat/rd-mailform.php">
+                <form class="rd-form rd-mailform rd-form-inline rd-form-inline-sm oh-desktop newsletter-form">
                   <div class="form-wrap wow slideInUp">
                     <input class="form-input" id="subscribe-form-2-email" type="email" name="email" data-constraints="@Email @Required"/>
                     <label class="form-label" for="subscribe-form-2-email">Enter your E-mail</label>
@@ -369,5 +369,6 @@
     <!-- Javascript-->
     <script src="js/core.min.js"></script>
     <script src="js/script.js"></script>
-  </body>
+  <script src="js/custom-api.js"></script>
+</body>
 </html>

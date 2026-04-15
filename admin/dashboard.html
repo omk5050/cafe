@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PizzaHouse Dashboard</title>
+    <!-- Route Protection -->
+    <script>
+        if (!localStorage.getItem('adminToken')) {
+            window.location.href = 'login.html';
+        }
+        
+        const getApiBaseUrl = () => {
+            if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                return 'http://localhost:5000';
+            }
+            return '';
+        };
+        const API_BASE_URL = getApiBaseUrl();
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --sidebar-bg: rgba(20, 24, 33, 0.6);
+            --content-bg: #0f111a;
+            --primary: #FF5A5F;
+            --text-main: #f1f2f6;
+            --text-muted: #8395a7;
+            --border-color: rgba(255,255,255,0.05);
+            --surface-color: rgba(255,255,255,0.03);
+            --input-bg: rgba(0,0,0,0.3);
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Glassmorphism */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 0;
+            z-index: 10;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+        }
+
+        .brand {
+            padding: 0 30px;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 40px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-links li {
+            padding: 0 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-muted);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255, 90, 95, 0.1);
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 12px 20px;
+            text-align: left;
+            margin: 0 20px;
+            transition: color 0.3s;
+        }
+
+        .logout-btn:hover {
+            color: #ff4757;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            background: var(--content-bg);
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,90,95,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            color: var(--text-muted);
+        }
+
+        /* Form & Cards Area */
+        .admin-form {
+            position: relative;
+            z-index: 1;
+            background: var(--surface-color);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px 15px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #ff4045;
+        }
+
+        /* Menu Grid Styles */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .item-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .item-card-body {
+            padding: 15px;
+            flex-grow: 1;
+        }
+
+        .item-card-title {
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+
+        .item-card-price {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .btn-delete {
+            width: 100%;
+            background: rgba(255, 90, 95, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(255, 90, 95, 0.2);
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-delete:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Routing Setup */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        .welcome-card {
+            position: relative;
+            z-index: 1;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">PizzaHouse</div>
+        <ul class="nav-links">
+            <li><a href="#" class="active" data-module="overview">Overview</a></li>
+            <li><a href="#" data-module="menu">Menu Manager</a></li>
+            <li><a href="#" data-module="team">Team Members</a></li>
+            <li><a href="#" data-module="testimonials">Testimonials</a></li>
+            <li><a href="#" data-module="bookings">Bookings</a></li>
+            <li><a href="#" data-module="contacts">Contacts</a></li>
+            <li><a href="#" data-module="newsletter">Newsletter</a></li>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1 id="page-title">Dashboard Shell</h1>
+            <p id="page-subtitle">Welcome back, Admin. Select a module to begin.</p>
+        </div>
+        
+        <div id="welcome-view" class="view-section active">
+            <div class="welcome-card">
+                <p>Select a navigation item to load content.</p>
+            </div>
+        </div>
+
+        <!-- Menu Manager View -->
+        <div id="menu-manager-view" class="view-section">
+            <div class="admin-form">
+                <h3 style="margin-top:0;">Add New Menu Item</h3>
+                <form id="menu-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" step="0.01" name="price" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Old Price (Optional)</label>
+                            <input type="number" step="0.01" name="oldPrice">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tag</label>
+                            <select name="tag">
+                                <option value="NONE">None</option>
+                                <option value="NEW">New</option>
+                                <option value="SALE">Sale</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <input type="number" name="rating" min="1" max="5" value="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" name="image" accept="image/*" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Upload & Save</button>
+                </form>
+            </div>
+
+            <div class="items-grid" id="menu-grid">
+                <!-- Dynamically populated -->
+            </div>
+        <!-- Team Manager View -->
+        <div id="team-manager-view" class="view-section">
+            <div class="admin-form">
+                <h3 style="margin-top:0;">Add New Team Member</h3>
+                <form id="team-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" name="role" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" name="image" accept="image/*" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Upload & Save</button>
+                </form>
+            </div>
+
+            <div class="items-grid" id="team-grid">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Testimonial Manager View -->
+        <div id="testimonial-manager-view" class="view-section">
+            <div class="admin-form">
+                <h3 style="margin-top:0;">Add New Testimonial</h3>
+                <form id="testimonial-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Client Name</label>
+                            <input type="text" name="clientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Client Role</label>
+                            <input type="text" name="clientRole" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Quote</label>
+                            <textarea name="quote" class="form-group" style="padding:12px 15px; background:var(--input-bg); border:1px solid var(--border-color); color:#fff; border-radius:8px; font-family:'Inter',sans-serif; resize:vertical; min-height:80px;" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Client Image</label>
+                            <input type="file" name="image" accept="image/*" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Upload & Save</button>
+                </form>
+            </div>
+
+            <div class="items-grid" id="testimonial-grid">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Bookings View -->
+        <div id="bookings-view" class="view-section">
+            <h3 style="margin-bottom: 20px;">Recent Bookings</h3>
+            <div class="items-grid" id="bookings-grid">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Contacts View -->
+        <div id="contacts-view" class="view-section">
+            <h3 style="margin-bottom: 20px;">Contact Messages</h3>
+            <div class="items-grid" id="contacts-grid">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Newsletter View -->
+        <div id="newsletter-view" class="view-section">
+            <h3 style="margin-bottom: 20px;">Newsletter Subscriptions</h3>
+            <div class="items-grid" id="newsletter-grid">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+        
+    </main>
+
+    <script>
+        const token = localStorage.getItem('adminToken');
+        
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('adminToken');
+            window.location.href = 'login.html';
+        });
+
+        // Basic router mechanism
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+                
+                const module = link.getAttribute('data-module');
+                if (module === 'menu') {
+                    document.getElementById('menu-manager-view').classList.add('active');
+                    document.getElementById('page-title').textContent = 'Menu Manager';
+                    document.getElementById('page-subtitle').textContent = 'Add or remove pizza items dynamically.';
+                    fetchMenu();
+                } else if (module === 'team') {
+                    document.getElementById('team-manager-view').classList.add('active');
+                    document.getElementById('page-title').textContent = 'Team Members';
+                    document.getElementById('page-subtitle').textContent = 'Manage the cafe team.';
+                    fetchTeam();
+                } else if (module === 'testimonials') {
+                    document.getElementById('testimonial-manager-view').classList.add('active');
+                    document.getElementById('page-title').textContent = 'Testimonials';
+                    document.getElementById('page-subtitle').textContent = 'Manage client feedback.';
+                    fetchTestimonials();
+                } else if (module === 'bookings') {
+                    document.getElementById('bookings-view').classList.add('active');
+                    document.getElementById('page-title').textContent = 'Bookings';
+                    document.getElementById('page-subtitle').textContent = 'Manage table reservations.';
+                    fetchBookings();
+                } else if (module === 'contacts') {
+                    document.getElementById('contacts-view').classList.add('active');
+                    document.getElementById('page-title').textContent = 'Contacts';
+                    document.getElementById('page-subtitle').textContent = 'Client inbound messages.';
+                    fetchContacts();
+                } else if (module === 'newsletter') {
+                    document.getElementById('newsletter-view').classList.add('active');
+                    document.getElementById('page-title').textContent = 'Newsletter';
+                    document.getElementById('page-subtitle').textContent = 'Client subscriptions.';
+                    fetchNewsletter();
+                } else {
+                    document.getElementById('welcome-view').classList.add('active');
+                    document.getElementById('page-title').textContent = 'Dashboard Shell';
+                    document.getElementById('page-subtitle').textContent = 'Select a module to begin.';
+                }
+            });
+        });
+
+        // === MENU MANAGER LOGIC ===
+        const menuForm = document.getElementById('menu-form');
+        const menuGrid = document.getElementById('menu-grid');
+
+        menuForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = menuForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Uploading...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(menuForm);
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/menu`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                        // Note: Never set Content-Type header manually when using FormData!
+                    },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    menuForm.reset();
+                    alert('Menu item added successfully!');
+                    fetchMenu();
+                } else {
+                    const data = await res.json();
+                    alert('Error: ' + (data.error || 'Failed to add item'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred during submission.');
+            } finally {
+                submitBtn.textContent = 'Upload & Save';
+                submitBtn.disabled = false;
+            }
+        });
+
+        async function fetchMenu() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/menu`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    menuGrid.innerHTML = data.map(item => `
+                        <div class="item-card">
+                            <img src="${item.imageUrl}" alt="${item.name}">
+                            <div class="item-card-body">
+                                <h4 class="item-card-title">${item.name}</h4>
+                                <div class="item-card-price">$${item.price.toFixed(2)}</div>
+                                <button class="btn-delete" onclick="deleteMenu('${item._id}')">Delete Item</button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    if (res.status === 401) {
+                         alert("Session expired. Please log in again.");
+                         document.getElementById('logoutBtn').click();
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching menu items", err);
+            }
+        }
+
+        // Must be attached to window since we generate HTML dynamically with onclick
+        window.deleteMenu = async function(id) {
+            if (!confirm("Are you sure you want to permanently delete this item and its image from Cloudinary?")) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/menu/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    fetchMenu();
+                } else {
+                    const data = await res.json();
+                    alert('Error deleting: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Failed to perform delete");
+            }
+        };
+        // === TEAM LOGIC ===
+        const teamForm = document.getElementById('team-form');
+        const teamGrid = document.getElementById('team-grid');
+
+        teamForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = teamForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Uploading...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(teamForm);
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/team`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    teamForm.reset();
+                    alert('Team member added successfully!');
+                    fetchTeam();
+                } else {
+                    const data = await res.json();
+                    alert('Error: ' + (data.error || 'Failed to add item'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred during submission.');
+            } finally {
+                submitBtn.textContent = 'Upload & Save';
+                submitBtn.disabled = false;
+            }
+        });
+
+        async function fetchTeam() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/team`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    teamGrid.innerHTML = data.map(item => `
+                        <div class="item-card">
+                            <img src="${item.imageUrl}" alt="${item.name}">
+                            <div class="item-card-body">
+                                <h4 class="item-card-title">${item.name}</h4>
+                                <div class="item-card-price" style="color:var(--text-muted); font-size:14px;">${item.role}</div>
+                                <button class="btn-delete" style="margin-top:auto;" onclick="deleteTeam('${item._id}')">Delete Member</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error("Error fetching team items", err);
+            }
+        }
+
+        window.deleteTeam = async function(id) {
+            if (!confirm("Delete this team member and image?")) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/team/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    fetchTeam();
+                } else {
+                    const data = await res.json();
+                    alert('Error deleting: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Failed to perform delete");
+            }
+        };
+
+        // === TESTIMONIAL LOGIC ===
+        const testimonialForm = document.getElementById('testimonial-form');
+        const testimonialGrid = document.getElementById('testimonial-grid');
+
+        testimonialForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = testimonialForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Uploading...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(testimonialForm);
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/testimonial`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    testimonialForm.reset();
+                    alert('Testimonial added successfully!');
+                    fetchTestimonials();
+                } else {
+                    const data = await res.json();
+                    alert('Error: ' + (data.error || 'Failed to add item'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred during submission.');
+            } finally {
+                submitBtn.textContent = 'Upload & Save';
+                submitBtn.disabled = false;
+            }
+        });
+
+        async function fetchTestimonials() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/testimonial`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    testimonialGrid.innerHTML = data.map(item => `
+                        <div class="item-card">
+                            <img src="${item.imageUrl}" alt="${item.clientName}">
+                            <div class="item-card-body">
+                                <h4 class="item-card-title">${item.clientName}</h4>
+                                <div class="item-card-price" style="color:var(--text-muted); font-size:12px;">${item.clientRole}</div>
+                                <p style="font-size:13px; font-style:italic; margin-bottom:15px; color:#ddd;">"${item.quote}"</p>
+                                <button class="btn-delete" style="margin-top:auto;" onclick="deleteTestimonial('${item._id}')">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error("Error fetching testimonials", err);
+            }
+        }
+
+        window.deleteTestimonial = async function(id) {
+            if (!confirm("Delete this testimonial?")) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/testimonial/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    fetchTestimonials();
+                } else {
+                    const data = await res.json();
+                    alert('Error deleting: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Failed to perform delete");
+            }
+        };
+
+        // === READ-ONLY LOGIC ===
+        async function fetchBookings() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/bookings`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+                const grid = document.getElementById('bookings-grid');
+                if (res.ok) {
+                    grid.innerHTML = data.map(item => `
+                        <div class="item-card" style="padding:20px;">
+                            <h4 class="item-card-title">${item.name}</h4>
+                            <div style="font-size:13px; color:var(--primary); margin-bottom:10px;">Service: ${item.service}</div>
+                            <div style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Email: ${item.email}</div>
+                            <p style="font-size:13px; color:#ddd; background:var(--input-bg); padding:10px; border-radius:6px; line-height:1.5;">${item.message || 'No message provided.'}</p>
+                            <div style="font-size:11px; color:#666; margin-top:10px;">Date: ${new Date(item.createdAt).toLocaleString()}</div>
+                        </div>
+                    `).join('');
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function fetchContacts() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/contacts`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+                const grid = document.getElementById('contacts-grid');
+                if (res.ok) {
+                    grid.innerHTML = data.map(item => `
+                        <div class="item-card" style="padding:20px;">
+                            <h4 class="item-card-title">${item.name}</h4>
+                            <div style="font-size:13px; color:var(--primary); margin-bottom:5px;">Service: ${item.service || 'N/A'}</div>
+                            <div style="font-size:13px; color:var(--text-muted); margin-bottom:15px; line-height:1.5;">Email: ${item.email}<br>Phone: ${item.phone || 'N/A'}</div>
+                            <p style="font-size:13px; color:#ddd; background:var(--input-bg); padding:10px; border-radius:6px; line-height:1.5;">${item.message || 'No message provided.'}</p>
+                            <div style="font-size:11px; color:#666; margin-top:10px;">Date: ${new Date(item.createdAt).toLocaleString()}</div>
+                        </div>
+                    `).join('');
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function fetchNewsletter() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/newsletter`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+                const grid = document.getElementById('newsletter-grid');
+                if (res.ok) {
+                    grid.innerHTML = data.map(item => `
+                        <div class="item-card" style="padding:20px; display:flex; flex-direction:row; justify-content:space-between; align-items:center;">
+                            <div>
+                                <h4 style="margin:0; font-size:15px; font-weight:500;">${item.email}</h4>
+                                <div style="font-size:12px; color:var(--text-muted); margin-top:5px;">Subscribed: ${new Date(item.createdAt).toLocaleString()}</div>
+                            </div>
+                            <span style="background:rgba(255,90,95,0.1); color:var(--primary); padding:6px 10px; border-radius:4px; font-size:12px; font-weight:600;">ACTIVE</span>
+                        </div>
+                    `).join('');
+                }
+            } catch (err) { console.error(err); }
+        }
+    </script>
+</body>
+</html>
