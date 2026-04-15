@@ -6,6 +6,8 @@ const rateLimit = require('express-rate-limit');
 const Booking = require('../models/Booking');
 const Contact = require('../models/Contact');
 const Newsletter = require('../models/Newsletter');
+const Menu = require('../models/Menu');
+const Team = require('../models/Team');
 
 // Rate limit middleware: max 5 requests per hour
 const publicRateLimiter = rateLimit({
@@ -14,8 +16,28 @@ const publicRateLimiter = rateLimit({
   message: { error: 'Too many requests from this IP, please try again after an hour' }
 });
 
-// Apply rate limiter to all routes in this file
-router.use(publicRateLimiter);
+// Rate limiter applies to form submission routes ONLY (not reads)
+router.post('*', publicRateLimiter);
+
+// @route   GET /api/public/menu — No auth required (public storefront)
+router.get('/menu', async (req, res) => {
+  try {
+    const items = await Menu.find().sort({ createdAt: -1 });
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// @route   GET /api/public/team — No auth required (public storefront)
+router.get('/team', async (req, res) => {
+  try {
+    const items = await Team.find().sort({ createdAt: -1 });
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // @route   POST /api/public/book
 router.post('/book', async (req, res) => {

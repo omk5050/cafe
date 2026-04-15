@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Fetch Menu (Selected Pizzas)
     const pizzaGrid = document.getElementById('pizza-grid');
     if (pizzaGrid) {
-        fetch(`${API_BASE_URL}/api/admin/menu`)
+        fetch(`${API_BASE_URL}/api/public/menu`)
             .then(res => {
                 if(!res.ok) throw new Error('Network response was not ok');
                 return res.json();
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. Fetch Team
     const teamGrid = document.getElementById('team-grid');
     if (teamGrid) {
-        fetch(`${API_BASE_URL}/api/admin/team`)
+        fetch(`${API_BASE_URL}/api/public/team`)
             .then(res => {
                 if(!res.ok) throw new Error('Network response was not ok');
                 return res.json();
