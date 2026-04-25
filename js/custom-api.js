@@ -86,17 +86,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. Fetch Menu (Selected Pizzas)
-    const pizzaGrid = document.getElementById('pizza-grid');
-    if (pizzaGrid) {
+    // 4. Fetch Menu (Dynamic Menu Items)
+    const dynamicMenuGrid = document.getElementById('dynamic-menu-grid');
+    if (dynamicMenuGrid) {
         fetch(`${API_BASE_URL}/api/public/menu`)
             .then(res => {
                 if(!res.ok) throw new Error('Network response was not ok');
                 return res.json();
             })
             .then(data => {
+                // Always clear placeholder content first
+                dynamicMenuGrid.innerHTML = '';
                 if (Array.isArray(data) && data.length > 0) {
-                    pizzaGrid.innerHTML = data.map(pizza => `
+                    dynamicMenuGrid.innerHTML = data.map(pizza => `
                         <div class="col-sm-6 col-lg-4 col-xl-3">
                             <article class="product wow fadeInLeft" data-wow-delay=".15s">
                                 <div class="product-figure">
@@ -121,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Error fetching menu:', err));
     }
 
+
     // 5. Fetch Testimonials
     const testimonialsCarousel = document.getElementById('testimonials-carousel');
     if (testimonialsCarousel) {
@@ -130,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return res.json();
             })
             .then(data => {
+                // Always clear static placeholder content first
+                testimonialsCarousel.innerHTML = '';
                 if (Array.isArray(data) && data.length > 0) {
                     testimonialsCarousel.innerHTML = data.map(t => `
                         <article class="quote-tara">
@@ -159,6 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return res.json();
             })
             .then(data => {
+                // Always clear static placeholder content first
+                teamGrid.innerHTML = '';
                 if (Array.isArray(data) && data.length > 0) {
                     teamGrid.innerHTML = data.map(member => `
                         <div class="col-sm-6 col-lg-3 wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="1s">
