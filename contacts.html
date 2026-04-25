@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
     <!--[if lt IE 10]>
     <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
     <script src="js/html5shiv.min.js"></script>
@@ -159,6 +160,26 @@
                         </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+                <!-- RD Navbar Cart Sidebar-->
+                <div class="rd-navbar-cart-sidebar">
+                  <div class="rd-navbar-cart-header">
+                    <h5 class="rd-navbar-cart-title">Your Cart</h5>
+                    <div class="rd-navbar-cart-close mdi mdi-close" data-multitoggle=".rd-navbar-cart-sidebar" data-multitoggle-blur=".rd-navbar-wrap" data-multitoggle-isolate="data-multitoggle-isolate"></div>
+                  </div>
+                  <div class="rd-navbar-cart-body">
+                    <div id="cart-items-container">
+                      <!-- Dynamic items will appear here -->
+                      <p class="empty-cart-msg">Your cart is empty.</p>
+                    </div>
+                  </div>
+                  <div class="rd-navbar-cart-footer">
+                    <div class="cart-total-wrap">
+                      <span>Total:</span>
+                      <span id="cart-total-amount">$0.00</span>
+                    </div>
+                    <button class="button button-primary button-winona checkout-btn" id="checkout-btn">Checkout</button>
                   </div>
                 </div>
               </div>
@@ -369,6 +390,8 @@
     <!-- Javascript-->
     <script src="js/core.min.js"></script>
     <script src="js/script.js"></script>
+  <script src="js/cart.js"></script>
   <script src="js/custom-api.js"></script>
 </body>
+
 </html>

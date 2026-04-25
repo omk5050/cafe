@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cart.css">
 
 </head>
 
@@ -108,7 +109,14 @@
                     </li>
                   </ul>
                 </div>
+                <!-- RD Navbar Cart Toggle-->
+                <div class="rd-navbar-cart-toggle-wrap">
+                  <button class="rd-navbar-cart-toggle mdi mdi-cart" data-multitoggle=".rd-navbar-cart-sidebar" data-multitoggle-blur=".rd-navbar-wrap" data-multitoggle-isolate="data-multitoggle-isolate">
+                    <span class="cart-count">0</span>
+                  </button>
+                </div>
               </div>
+
               <div class="rd-navbar-project-hamburger rd-navbar-project-hamburger-open rd-navbar-fixed-element-1"
                 data-multitoggle=".rd-navbar-inner" data-multitoggle-blur=".rd-navbar-wrap"
                 data-multitoggle-isolate="data-multitoggle-isolate">
@@ -198,11 +206,32 @@
                   </div>
                 </div>
               </div>
+              <!-- RD Navbar Cart Sidebar-->
+              <div class="rd-navbar-cart-sidebar">
+                <div class="rd-navbar-cart-header">
+                  <h5 class="rd-navbar-cart-title">Your Cart</h5>
+                  <div class="rd-navbar-cart-close mdi mdi-close" data-multitoggle=".rd-navbar-cart-sidebar" data-multitoggle-blur=".rd-navbar-wrap" data-multitoggle-isolate="data-multitoggle-isolate"></div>
+                </div>
+                <div class="rd-navbar-cart-body">
+                  <div id="cart-items-container">
+                    <!-- Dynamic items will appear here -->
+                    <p class="empty-cart-msg">Your cart is empty.</p>
+                  </div>
+                </div>
+                <div class="rd-navbar-cart-footer">
+                  <div class="cart-total-wrap">
+                    <span>Total:</span>
+                    <span id="cart-total-amount">$0.00</span>
+                  </div>
+                  <button class="button button-primary button-winona checkout-btn" id="checkout-btn">Checkout</button>
+                </div>
+              </div>
             </div>
           </div>
         </nav>
       </div>
     </header>
+
     <!-- Swiper-->
     <section class="section swiper-container swiper-slider swiper-slider-2 swiper-slider-3" data-loop="true"
       data-autoplay="5000" data-simulate-touch="false" data-slide-effect="fade">
@@ -382,11 +411,13 @@
                 <div class="product-price">$24.00</div>
               </div>
               <div class="product-button">
-                <div class="button-wrap"><a class="button button-xs button-primary button-winona" href="#">Add to
+                <div class="button-wrap"><a class="button button-xs button-primary button-winona add-to-cart-btn" href="#"
+                    data-id="static-1" data-name="Margherita Pizza" data-price="24.00" data-image="images/product-1-161x162.png">Add to
                     cart</a></div>
                 <div class="button-wrap"><a class="button button-xs button-secondary button-winona" href="#">View
                     Product</a></div>
               </div>
+
             </article>
           </div>
           <div class="col-sm-6 col-lg-4 col-xl-3">
@@ -402,7 +433,8 @@
                 <div class="product-price">$24.00</div>
               </div>
               <div class="product-button">
-                <div class="button-wrap"><a class="button button-xs button-primary button-winona" href="#">Add to
+                <div class="button-wrap"><a class="button button-xs button-primary button-winona add-to-cart-btn" href="#"
+                    data-id="static-2" data-name="Mushroom Pizza" data-price="24.00" data-image="images/product-2-161x162.png">Add to
                     cart</a></div>
                 <div class="button-wrap"><a class="button button-xs button-secondary button-winona" href="#">View
                     Product</a></div>
@@ -423,7 +455,8 @@
                 <div class="product-price">$24.00</div>
               </div>
               <div class="product-button">
-                <div class="button-wrap"><a class="button button-xs button-primary button-winona" href="#">Add to
+                <div class="button-wrap"><a class="button button-xs button-primary button-winona add-to-cart-btn" href="#"
+                    data-id="static-3" data-name="Hawaiian Pizza" data-price="24.00" data-image="images/product-3-161x162.png">Add to
                     cart</a></div>
                 <div class="button-wrap"><a class="button button-xs button-secondary button-winona" href="#">View
                     Product</a></div>
@@ -444,11 +477,13 @@
                 <div class="product-price">$24.00</div>
               </div>
               <div class="product-button">
-                <div class="button-wrap"><a class="button button-xs button-primary button-winona" href="#">Add to
+                <div class="button-wrap"><a class="button button-xs button-primary button-winona add-to-cart-btn" href="#"
+                    data-id="static-4" data-name="Pesto Pizza" data-price="24.00" data-image="images/product-4-161x162.webp">Add to
                     cart</a></div>
                 <div class="button-wrap"><a class="button button-xs button-secondary button-winona" href="#">View
                     Product</a></div>
-              </div><span class="product-badge product-badge-sale">Sale</span>
+              </div>
+<span class="product-badge product-badge-sale">Sale</span>
             </article>
           </div>
         </div>
@@ -851,6 +886,7 @@
   <!-- Javascript-->
   <script src="js/core.min.js"></script>
   <script src="js/script.js"></script>
+  <script src="js/cart.js"></script>
   <script src="js/custom-api.js"></script>
   <!-- coded by Himic-->
 </body>

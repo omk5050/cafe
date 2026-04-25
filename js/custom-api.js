@@ -112,8 +112,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <div class="product-price">$${pizza.price.toFixed(2)}</div>
                                 </div>
                                 <div class="product-button">
-                                    <div class="button-wrap"><a class="button button-xs button-primary button-winona" href="#">Add to cart</a></div>
+                                    <div class="button-wrap">
+                                        <a class="button button-xs button-primary button-winona add-to-cart-btn" 
+                                           href="#" 
+                                           data-id="${pizza._id}" 
+                                           data-name="${pizza.name}" 
+                                           data-price="${pizza.price}" 
+                                           data-image="${pizza.imageUrl}">Add to cart</a>
+                                    </div>
                                 </div>
+
                                 ${pizza.tag && pizza.tag !== 'NONE' ? `<span class="product-badge product-badge-${pizza.tag.toLowerCase()}">${pizza.tag}</span>` : ''}
                             </article>
                         </div>
