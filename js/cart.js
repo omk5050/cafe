@@ -48,6 +48,38 @@ function updateCartUI() {
 }
 
 /**
+ * Shows a professional toast notification
+ */
+function showToast(title, message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    const icon = type === 'success' ? 'mdi-check-circle' : 'mdi-information';
+    
+    toast.innerHTML = `
+        <span class="toast-icon mdi ${icon}"></span>
+        <div class="toast-content">
+            <h6 class="toast-title">${title}</h6>
+            <p class="toast-msg">${message}</p>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // Trigger animation
+    setTimeout(() => toast.classList.add('active'), 10);
+
+    // Remove after delay
+    setTimeout(() => {
+        toast.classList.remove('active');
+        setTimeout(() => toast.remove(), 500);
+    }, 4000);
+}
+
+/**
  * Adds an item to the cart
  */
 window.addToCart = function(id, name, price, imageUrl) {
@@ -59,16 +91,23 @@ window.addToCart = function(id, name, price, imageUrl) {
     }
     updateCartUI();
     
+    // Show success toast
+    showToast('Item Added', `${name} has been added to your cart.`, 'success');
+    
     // Optional: Open sidebar automatically when adding item
-    document.querySelector('.rd-navbar-cart-sidebar').classList.add('active');
+    // document.querySelector('.rd-navbar-cart-sidebar').classList.add('active');
 };
 
 /**
  * Removes an item from the cart
  */
 window.removeFromCart = function(id) {
+    const item = cart.find(i => i.id === id);
     cart = cart.filter(item => item.id !== id);
     updateCartUI();
+    if (item) {
+        showToast('Item Removed', `${item.name} removed from cart.`, 'info');
+    }
 };
 
 /**
@@ -94,14 +133,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', () => {
             if (cart.length === 0) {
-                alert('Your cart is empty!');
+                showToast('Empty Cart', 'Please add items before checking out.', 'info');
                 return;
             }
-            alert('Order placed successfully! (This is a demo)');
+            
+            showToast('Success!', 'Order placed successfully! (Demo)', 'success');
+            
             cart = [];
             updateCartUI();
-            // Close sidebar
-            document.querySelector('.rd-navbar-cart-sidebar').classList.remove('active');
+            
+            // Close sidebar after a short delay
+            setTimeout(() => {
+                document.querySelector('.rd-navbar-cart-sidebar').classList.remove('active');
+            }, 1000);
         });
     }
 
