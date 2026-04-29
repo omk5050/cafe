@@ -1,5 +1,9 @@
-// In-memory cart state
-let cart = [];
+// In-memory cart state (initialized from localStorage)
+let cart = JSON.parse(localStorage.getItem('cafe_cart')) || [];
+
+function saveCart() {
+    localStorage.setItem('cafe_cart', JSON.stringify(cart));
+}
 
 /**
  * Syncs the UI with the current cart state
@@ -48,38 +52,6 @@ function updateCartUI() {
 }
 
 /**
- * Shows a professional toast notification
- */
-function showToast(title, message, type = 'info') {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
-
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    const icon = type === 'success' ? 'mdi-check-circle' : 'mdi-information';
-    
-    toast.innerHTML = `
-        <span class="toast-icon mdi ${icon}"></span>
-        <div class="toast-content">
-            <h6 class="toast-title">${title}</h6>
-            <p class="toast-msg">${message}</p>
-        </div>
-    `;
-
-    container.appendChild(toast);
-
-    // Trigger animation
-    setTimeout(() => toast.classList.add('active'), 10);
-
-    // Remove after delay
-    setTimeout(() => {
-        toast.classList.remove('active');
-        setTimeout(() => toast.remove(), 500);
-    }, 4000);
-}
-
-/**
  * Adds an item to the cart
  */
 window.addToCart = function(id, name, price, imageUrl) {
@@ -89,6 +61,7 @@ window.addToCart = function(id, name, price, imageUrl) {
     } else {
         cart.push({ id, name, price: parseFloat(price), imageUrl, quantity: 1 });
     }
+    saveCart();
     updateCartUI();
     
     // Show success toast
@@ -104,6 +77,7 @@ window.addToCart = function(id, name, price, imageUrl) {
 window.removeFromCart = function(id) {
     const item = cart.find(i => i.id === id);
     cart = cart.filter(item => item.id !== id);
+    saveCart();
     updateCartUI();
     if (item) {
         showToast('Item Removed', `${item.name} removed from cart.`, 'info');
@@ -120,6 +94,7 @@ window.updateItemQuantity = function(id, delta) {
         if (item.quantity <= 0) {
             removeFromCart(id);
         } else {
+            saveCart();
             updateCartUI();
         }
     }
@@ -129,6 +104,9 @@ window.updateItemQuantity = function(id, delta) {
  * Handles Checkout
  */
 document.addEventListener('DOMContentLoaded', () => {
+    // Initial UI update from localStorage
+    updateCartUI();
+
     const checkoutBtn = document.getElementById('checkout-btn');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', () => {
@@ -137,15 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            showToast('Success!', 'Order placed successfully! (Demo)', 'success');
-            
-            cart = [];
-            updateCartUI();
-            
-            // Close sidebar after a short delay
-            setTimeout(() => {
-                document.querySelector('.rd-navbar-cart-sidebar').classList.remove('active');
-            }, 1000);
+            // Navigate to checkout page
+            window.location.href = 'checkout.html';
         });
     }
 

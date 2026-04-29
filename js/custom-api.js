@@ -23,14 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const result = await res.json();
                 if (res.ok) {
-                    alert('Booking successful!');
+                    showToast('Booking Success', 'Your table has been reserved!', 'success');
                     bookingForm.reset();
                 } else {
-                    alert('Error: ' + (result.error || 'Failed to book'));
+                    showToast('Booking Error', result.error || 'Failed to book table', 'error');
                 }
             } catch (error) {
-                alert('An error occurred. Please try again.');
+                showToast('Network Error', 'Please check your connection.', 'error');
             }
+
         });
     }
 
@@ -49,14 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const result = await res.json();
                 if (res.ok) {
-                    alert('Message sent successfully!');
+                    showToast('Message Sent', 'We will get back to you soon.', 'success');
                     contactForm.reset();
                 } else {
-                    alert('Error: ' + (result.error || 'Failed to send message'));
+                    showToast('Send Error', result.error || 'Failed to send message', 'error');
                 }
             } catch (error) {
-                alert('An error occurred. Please try again.');
+                showToast('Network Error', 'Please check your connection.', 'error');
             }
+
         });
     }
 
@@ -75,14 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const result = await res.json();
                 if (res.ok) {
-                    alert('Subscribed successfully!');
+                    showToast('Subscribed!', 'Welcome to our newsletter.', 'success');
                     form.reset();
                 } else {
-                    alert('Error: ' + (result.error || 'Failed to subscribe'));
+                    showToast('Subscription Error', result.error || 'Failed to subscribe', 'error');
                 }
             } catch (error) {
-                alert('An error occurred. Please try again.');
+                showToast('Network Error', 'Please check your connection.', 'error');
             }
+
         });
     });
 

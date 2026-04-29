@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html class="wide wow-animation" lang="en">
+
+<head>
+  <title>Checkout</title>
+  <meta name="format-detection" content="telephone=no">
+  <meta name="viewport"
+    content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <!-- Stylesheets-->
+  <link rel="stylesheet" type="text/css"
+    href="//fonts.googleapis.com/css?family=Roboto:100,300,300i,400,500,600,700,900%7CRaleway:500">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cart.css">
+  <link rel="stylesheet" href="css/checkout.css">
+
+</head>
+
+<body>
+  <div class="preloader">
+    <div class="wrapper-triangle">
+      <div class="pen">
+        <div class="line-triangle">
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+        </div>
+        <div class="line-triangle">
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+        </div>
+        <div class="line-triangle">
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+          <div class="triangle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+    <!-- Page Header-->
+    <header class="section page-header">
+      <!-- RD Navbar-->
+      <div class="rd-navbar-wrap">
+        <nav class="rd-navbar rd-navbar-modern" data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fixed"
+          data-md-layout="rd-navbar-fixed" data-md-device-layout="rd-navbar-fixed" data-lg-layout="rd-navbar-static"
+          data-lg-device-layout="rd-navbar-fixed" data-xl-layout="rd-navbar-static"
+          data-xl-device-layout="rd-navbar-static" data-xxl-layout="rd-navbar-static"
+          data-xxl-device-layout="rd-navbar-static" data-lg-stick-up-offset="56px" data-xl-stick-up-offset="56px"
+          data-xxl-stick-up-offset="56px" data-lg-stick-up="true" data-xl-stick-up="true" data-xxl-stick-up="true">
+          <div class="rd-navbar-inner-outer">
+            <div class="rd-navbar-inner">
+              <!-- RD Navbar Panel-->
+              <div class="rd-navbar-panel">
+                <!-- RD Navbar Toggle-->
+                <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
+                <!-- RD Navbar Brand-->
+                <div class="rd-navbar-brand"><a class="brand" href="index.html"><img class="brand-logo-dark"
+                      src="images/logo-198x66.png" alt="" width="198" height="66" /></a></div>
+              </div>
+              <div class="rd-navbar-right rd-navbar-nav-wrap">
+                <div class="rd-navbar-aside">
+                  <ul class="rd-navbar-contacts-2">
+                    <li>
+                      <div class="unit unit-spacing-xs">
+                        <div class="unit-left"><span class="icon mdi mdi-phone"></span></div>
+                        <div class="unit-body"><a class="phone" href="tel:#">+1 718-999-3939</a></div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="unit unit-spacing-xs">
+                        <div class="unit-left"><span class="icon mdi mdi-map-marker"></span></div>
+                        <div class="unit-body"><a class="address" href="#">514 S. Magnolia St. Orlando, FL 32806</a>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                  <ul class="list-share-2">
+                    <li><a class="icon mdi mdi-facebook" href="#"></a></li>
+                    <li><a class="icon mdi mdi-twitter" href="#"></a></li>
+                    <li><a class="icon mdi mdi-instagram" href="#"></a></li>
+                    <li><a class="icon mdi mdi-google-plus" href="#"></a></li>
+                  </ul>
+                </div>
+                <div class="rd-navbar-main">
+                  <!-- RD Navbar Nav-->
+                  <ul class="rd-navbar-nav">
+                    <li class="rd-nav-item"><a class="rd-nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="rd-nav-item"><a class="rd-nav-link" href="about-us.html">About us</a>
+                    </li>
+                    <li class="rd-nav-item"><a class="rd-nav-link" href="contacts.html">Contacts</a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- RD Navbar Cart Toggle-->
+                <div class="rd-navbar-cart-toggle-wrap">
+                  <button class="rd-navbar-cart-toggle mdi mdi-cart" data-multitoggle=".rd-navbar-cart-sidebar" data-multitoggle-blur=".rd-navbar-wrap" data-multitoggle-isolate="data-multitoggle-isolate">
+                    <span class="cart-count">0</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- RD Navbar Cart Sidebar-->
+              <div class="rd-navbar-cart-sidebar">
+                <div class="rd-navbar-cart-header">
+                  <h5 class="rd-navbar-cart-title">Your Cart</h5>
+                  <div class="rd-navbar-cart-close mdi mdi-close" data-multitoggle=".rd-navbar-cart-sidebar" data-multitoggle-blur=".rd-navbar-wrap" data-multitoggle-isolate="data-multitoggle-isolate"></div>
+                </div>
+                <div class="rd-navbar-cart-body">
+                  <div id="cart-items-container">
+                    <!-- Dynamic items will appear here -->
+                    <p class="empty-cart-msg">Your cart is empty.</p>
+                  </div>
+                </div>
+                <div class="rd-navbar-cart-footer">
+                  <div class="cart-total-wrap">
+                    <span>Total:</span>
+                    <span id="cart-total-amount">$0.00</span>
+                  </div>
+                  <button class="button button-primary button-winona checkout-btn" id="checkout-btn">Checkout</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Global Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Checkout Section -->
+    <section class="section checkout-section">
+      <div class="container">
+        
+        <div id="checkout-empty" class="checkout-empty" style="display: none;">
+          <i class="mdi mdi-cart-outline"></i>
+          <p>Your cart is empty.</p>
+          <a href="index.html" class="button button-primary button-winona">Return to Shop</a>
+        </div>
+
+        <div id="checkout-content" class="row row-50">
+          <!-- Billing Details -->
+          <div class="col-lg-7 col-xl-8">
+            <div class="checkout-card checkout-form">
+              <h3 class="checkout-title">Billing Details</h3>
+              <form id="checkout-form" class="rd-form">
+                <div class="row row-20 gutters-20">
+                  <div class="col-md-6">
+                    <div class="form-wrap">
+                      <label for="checkout-first-name">First Name *</label>
+                      <input class="form-input" id="checkout-first-name" type="text" name="first-name" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-wrap">
+                      <label for="checkout-last-name">Last Name *</label>
+                      <input class="form-input" id="checkout-last-name" type="text" name="last-name" required>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-wrap">
+                      <label for="checkout-company">Company Name (Optional)</label>
+                      <input class="form-input" id="checkout-company" type="text" name="company">
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-wrap">
+                      <label for="checkout-address">Street Address *</label>
+                      <input class="form-input" id="checkout-address" type="text" name="address" placeholder="House number and street name" required>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-wrap">
+                      <input class="form-input" id="checkout-address-2" type="text" name="address-2" placeholder="Apartment, suite, unit etc. (optional)">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-wrap">
+                      <label for="checkout-city">Town / City *</label>
+                      <input class="form-input" id="checkout-city" type="text" name="city" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-wrap">
+                      <label for="checkout-postcode">Postcode / ZIP *</label>
+                      <input class="form-input" id="checkout-postcode" type="text" name="postcode" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-wrap">
+                      <label for="checkout-phone">Phone *</label>
+                      <input class="form-input" id="checkout-phone" type="tel" name="phone" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-wrap">
+                      <label for="checkout-email">Email Address *</label>
+                      <input class="form-input" id="checkout-email" type="email" name="email" required>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-wrap">
+                      <label for="checkout-notes">Order Notes (Optional)</label>
+                      <textarea class="form-input" id="checkout-notes" name="notes" placeholder="Notes about your order, e.g. special notes for delivery." rows="4"></textarea>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- We place the submit button in the right column typically, but we need it here if form wraps everything. We'll wrap both columns if needed, or submit via JS -->
+                <!-- We will put the button in the summary box and handle form via standard HTML5 validation -->
+                <button type="submit" id="hidden-submit" style="display: none;"></button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="col-lg-5 col-xl-4">
+            <div class="checkout-card">
+              <h3 class="checkout-title">Your Order</h3>
+              
+              <div id="checkout-items-container">
+                <!-- Items will be dynamically loaded here -->
+              </div>
+
+              <div class="order-totals">
+                <div class="order-total-row">
+                  <span>Subtotal</span>
+                  <span id="checkout-subtotal">$0.00</span>
+                </div>
+                <div class="order-total-row">
+                  <span>Tax (8%)</span>
+                  <span id="checkout-tax">$0.00</span>
+                </div>
+                <div class="order-total-row">
+                  <span>Shipping</span>
+                  <span>Free</span>
+                </div>
+                <div class="order-total-row grand-total">
+                  <span>Total</span>
+                  <span id="checkout-total">$0.00</span>
+                </div>
+              </div>
+
+              <div class="payment-methods mt-4">
+                <h6 class="mb-3">Payment Method</h6>
+                <div class="form-wrap mb-2">
+                  <label><input type="radio" name="payment" value="credit" checked> Credit Card</label>
+                </div>
+                <div class="form-wrap mb-2">
+                  <label><input type="radio" name="payment" value="paypal"> PayPal</label>
+                </div>
+                <div class="form-wrap">
+                  <label><input type="radio" name="payment" value="cod"> Cash on Delivery</label>
+                </div>
+              </div>
+
+              <button class="button button-primary button-winona btn-place-order" onclick="document.getElementById('hidden-submit').click();">Place Order</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Page Footer-->
+    <footer class="section footer-modern context-dark footer-modern-2">
+      <div class="footer-modern-line">
+        <div class="container">
+          <div class="row row-50">
+            <div class="col-md-6 col-lg-4">
+              <h5 class="footer-modern-title oh-desktop"><span class="d-inline-block wow slideInLeft">What We Offer</span></h5>
+              <ul class="footer-modern-list d-inline-block d-sm-block wow fadeInUp">
+                <li><a href="#">Pizzas</a></li>
+                <li><a href="#">Burgers</a></li>
+                <li><a href="#">Salads</a></li>
+                <li><a href="#">Drinks</a></li>
+                <li><a href="#">Seafood</a></li>
+              </ul>
+            </div>
+            <div class="col-md-6 col-lg-4 col-xl-3">
+              <h5 class="footer-modern-title oh-desktop"><span class="d-inline-block wow slideInLeft">Information</span></h5>
+              <ul class="footer-modern-list d-inline-block d-sm-block wow fadeInUp">
+                <li><a href="about-us.html">About us</a></li>
+                <li><a href="#">Latest News</a></li>
+                <li><a href="#">Our Menu</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="contacts.html">Contact Us</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-4 col-xl-5">
+              <h5 class="footer-modern-title oh-desktop"><span class="d-inline-block wow slideInLeft">Newsletter</span></h5>
+              <p class="wow fadeInRight">Sign up today for the latest news and updates.</p>
+              <form class="rd-form rd-mailform rd-form-inline rd-form-inline-sm oh-desktop newsletter-form">
+                <div class="form-wrap wow slideInUp">
+                  <input class="form-input" id="subscribe-form-2-email" type="email" name="email" data-constraints="@Email @Required" />
+                  <label class="form-label" for="subscribe-form-2-email">Enter your E-mail</label>
+                </div>
+                <div class="form-button form-button-2 wow slideInRight">
+                  <button class="button button-sm button-icon-3 button-primary button-winona" type="submit"><span class="d-none d-xl-inline-block">Subscribe</span><span class="icon mdi mdi-telegram d-xl-none"></span></button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-modern-line-2">
+        <div class="container">
+          <div class="row row-30 align-items-center">
+            <div class="col-sm-6 col-md-7 col-lg-4 col-xl-4">
+              <div class="row row-30 align-items-center text-lg-center">
+                <div class="col-md-7 col-xl-6"><a class="brand" href="index.html"><img src="images/logo-inverse-198x66.png" alt="" width="198" height="66" /></a></div>
+                <div class="col-md-5 col-xl-6">
+                  <div class="iso-1"><span><img src="images/like-icon-58x25.png" alt="" width="58" height="25" /></span><span class="iso-1-big">9.4k</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-12 col-lg-8 col-xl-8 oh-desktop">
+              <div class="group-xmd group-sm-justify">
+                <div class="footer-modern-contacts wow slideInUp">
+                  <div class="unit unit-spacing-sm align-items-center">
+                    <div class="unit-left"><span class="icon icon-24 mdi mdi-phone"></span></div>
+                    <div class="unit-body"><a class="phone" href="tel:#">+1 718-999-3939</a></div>
+                  </div>
+                </div>
+                <div class="footer-modern-contacts wow slideInDown">
+                  <div class="unit unit-spacing-sm align-items-center">
+                    <div class="unit-left"><span class="icon mdi mdi-email"></span></div>
+                    <div class="unit-body"><a class="mail" href="mailto:#">info@demolink.org</a></div>
+                  </div>
+                </div>
+                <div class="wow slideInRight">
+                  <ul class="list-inline footer-social-list footer-social-list-2 footer-social-list-3">
+                    <li><a class="icon mdi mdi-facebook" href="#"></a></li>
+                    <li><a class="icon mdi mdi-twitter" href="#"></a></li>
+                    <li><a class="icon mdi mdi-instagram" href="#"></a></li>
+                    <li><a class="icon mdi mdi-google-plus" href="#"></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-modern-line-3">
+        <div class="container">
+          <div class="row row-10 justify-content-between">
+            <div class="col-md-6"><span>514 S. Magnolia St. Orlando, FL 32806</span></div>
+            <div class="col-md-auto">
+              <p class="rights"><span>&copy;&nbsp;</span><span class="copyright-year"></span><span></span><span>.&nbsp;</span><span>All Rights Reserved.</span><span> Design&nbsp;by&nbsp;Fayzora</span> <a href="admin/login.html" style="color: inherit; text-decoration: none; margin-left: 8px; opacity: 0.4; transition: opacity 0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.4"><span class="icon mdi mdi-lock" title="Admin Login"></span></a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <!-- Global Mailform Output-->
+  <div class="snackbars" id="form-output-global"></div>
+  <!-- Javascript-->
+  <script src="js/core.min.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
+
+</body>
+
+</html>

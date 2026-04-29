@@ -19,6 +19,8 @@
         const API_BASE_URL = getApiBaseUrl();
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/cart.css">
+
     <style>
         :root {
             --bg-dark: #0a0c10;
@@ -298,6 +300,8 @@
     </style>
 </head>
 <body>
+    <div id="toast-container" class="toast-container"></div>
+
 
     <aside class="sidebar">
         <div class="brand">PizzaHouse</div>
@@ -539,15 +543,18 @@
 
                 if (res.ok) {
                     menuForm.reset();
-                    alert('Menu item added successfully!');
+                    showToast('Success', 'Menu item added successfully!', 'success');
+
                     fetchMenu();
                 } else {
                     const data = await res.json();
-                    alert('Error: ' + (data.error || 'Failed to add item'));
+                    showToast('Error', data.error || 'Failed to add item', 'error');
+
                 }
             } catch (err) {
                 console.error(err);
-                alert('An error occurred during submission.');
+                showToast('Error', 'An error occurred during submission.', 'error');
+
             } finally {
                 submitBtn.textContent = 'Upload & Save';
                 submitBtn.disabled = false;
@@ -574,7 +581,8 @@
                     `).join('');
                 } else {
                     if (res.status === 401) {
-                         alert("Session expired. Please log in again.");
+                         showToast('Session Expired', 'Please log in again.', 'error');
+
                          document.getElementById('logoutBtn').click();
                     }
                 }
@@ -596,11 +604,13 @@
                     fetchMenu();
                 } else {
                     const data = await res.json();
-                    alert('Error deleting: ' + (data.error || 'Unknown error'));
+                    showToast('Error', data.error || 'Unknown error', 'error');
+
                 }
             } catch (err) {
                 console.error(err);
-                alert("Failed to perform delete");
+                showToast('Error', 'Failed to perform delete', 'error');
+
             }
         };
         // === TEAM LOGIC ===
@@ -624,15 +634,18 @@
 
                 if (res.ok) {
                     teamForm.reset();
-                    alert('Team member added successfully!');
+                    showToast('Success', 'Team member added successfully!', 'success');
+
                     fetchTeam();
                 } else {
                     const data = await res.json();
-                    alert('Error: ' + (data.error || 'Failed to add item'));
+                    showToast('Error', data.error || 'Failed to add item', 'error');
+
                 }
             } catch (err) {
                 console.error(err);
-                alert('An error occurred during submission.');
+                showToast('Error', 'An error occurred during submission.', 'error');
+
             } finally {
                 submitBtn.textContent = 'Upload & Save';
                 submitBtn.disabled = false;
@@ -675,11 +688,13 @@
                     fetchTeam();
                 } else {
                     const data = await res.json();
-                    alert('Error deleting: ' + (data.error || 'Unknown error'));
+                    showToast('Error', data.error || 'Unknown error', 'error');
+
                 }
             } catch (err) {
                 console.error(err);
-                alert("Failed to perform delete");
+                showToast('Error', 'Failed to perform delete', 'error');
+
             }
         };
 
@@ -704,15 +719,18 @@
 
                 if (res.ok) {
                     testimonialForm.reset();
-                    alert('Testimonial added successfully!');
+                    showToast('Success', 'Testimonial added successfully!', 'success');
+
                     fetchTestimonials();
                 } else {
                     const data = await res.json();
-                    alert('Error: ' + (data.error || 'Failed to add item'));
+                    showToast('Error', data.error || 'Failed to add item', 'error');
+
                 }
             } catch (err) {
                 console.error(err);
-                alert('An error occurred during submission.');
+                showToast('Error', 'An error occurred during submission.', 'error');
+
             } finally {
                 submitBtn.textContent = 'Upload & Save';
                 submitBtn.disabled = false;
@@ -756,11 +774,13 @@
                     fetchTestimonials();
                 } else {
                     const data = await res.json();
-                    alert('Error deleting: ' + (data.error || 'Unknown error'));
+                    showToast('Error', data.error || 'Unknown error', 'error');
+
                 }
             } catch (err) {
                 console.error(err);
-                alert("Failed to perform delete");
+                showToast('Error', 'Failed to perform delete', 'error');
+
             }
         };
 
@@ -837,5 +857,7 @@
             } catch (err) { console.error('fetchNewsletter failed:', err); }
         }
     </script>
+    <script src="../js/notifications.js"></script>
 </body>
 </html>
+

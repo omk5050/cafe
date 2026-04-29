@@ -1,0 +1,137 @@
+/* checkout.css */
+.checkout-section {
+    padding: 60px 0;
+    background-color: #f9f9f9;
+}
+
+.checkout-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.checkout-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #333;
+    border-bottom: 2px solid #f1f1f1;
+    padding-bottom: 15px;
+}
+
+.checkout-form .form-wrap {
+    margin-bottom: 20px;
+}
+
+.checkout-form .form-input {
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 12px 15px;
+    width: 100%;
+    transition: border-color 0.3s;
+}
+
+.checkout-form .form-input:focus {
+    border-color: #d12a2f; /* primary color matching theme */
+    outline: none;
+}
+
+.checkout-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Order Summary */
+.order-summary-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-summary-item:last-child {
+    border-bottom: none;
+}
+
+.order-item-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.order-item-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.order-item-details h6 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.order-item-qty {
+    font-size: 13px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.order-item-price {
+    font-weight: 600;
+    color: #333;
+}
+
+.order-totals {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px dashed #eee;
+}
+
+.order-total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.order-total-row.grand-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #d12a2f;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.btn-place-order {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    margin-top: 25px;
+}
+
+/* Empty State */
+.checkout-empty {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.checkout-empty i {
+    font-size: 60px;
+    color: #ccc;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.checkout-empty p {
+    font-size: 18px;
+    color: #777;
+    margin-bottom: 30px;
+}
