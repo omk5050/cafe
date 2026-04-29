@@ -9,6 +9,7 @@ const Newsletter = require('../models/Newsletter');
 const Menu = require('../models/Menu');
 const Team = require('../models/Team');
 const Testimonial = require('../models/Testimonial');
+const Order = require('../models/Order');
 
 // Rate limit middleware: max 5 requests per hour
 const publicRateLimiter = rateLimit({
@@ -92,6 +93,34 @@ router.post('/subscribe', publicRateLimiter, async (req, res) => {
     }
     console.error(error);
     res.status(500).json({ error: 'Server error while subscribing' });
+  }
+});
+
+// @route   POST /api/public/checkout
+router.post('/checkout', publicRateLimiter, async (req, res) => {
+  try {
+    const { customer, shippingAddress, notes, items, totals, paymentMethod } = req.body;
+    
+    // Basic validation
+    if (!items || items.length === 0) {
+      return res.status(400).json({ error: 'Cart is empty' });
+    }
+
+    const newOrder = new Order({
+      customer,
+      shippingAddress,
+      notes,
+      items,
+      totals,
+      paymentMethod
+    });
+
+    await newOrder.save();
+    
+    res.status(201).json({ message: 'Order placed successfully!', orderId: newOrder._id });
+  } catch (error) {
+    console.error('Checkout error:', error);
+    res.status(500).json({ error: 'Server error while processing checkout' });
   }
 });
 

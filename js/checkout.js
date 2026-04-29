@@ -1,7 +1,7 @@
 /**
  * checkout.js
  * Handles checkout page logic, rendering cart items from localStorage,
- * and processing the demo checkout submission.
+ * and processing the checkout submission to MongoDB.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,9 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkoutForm = document.getElementById('checkout-form');
     const checkoutContent = document.getElementById('checkout-content');
     const checkoutEmpty = document.getElementById('checkout-empty');
+    const btnPlaceOrder = document.querySelector('.btn-place-order');
 
     // Retrieve cart from localStorage
     let checkoutCart = JSON.parse(localStorage.getItem('cafe_cart')) || [];
+    let subtotal = 0;
+    let taxAmount = 0;
+    let grandTotal = 0;
 
     function renderCheckoutCart() {
         if (checkoutCart.length === 0) {
@@ -23,12 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (checkoutContent) checkoutContent.style.display = 'block';
+        if (checkoutContent) checkoutContent.style.display = 'flex';
         if (checkoutEmpty) checkoutEmpty.style.display = 'none';
 
         if (!checkoutCartContainer) return;
 
-        let subtotal = 0;
+        subtotal = 0;
         checkoutCartContainer.innerHTML = checkoutCart.map(item => {
             const itemTotal = item.price * item.quantity;
             subtotal += itemTotal;
@@ -48,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Calculate tax (e.g., 8%) and total
         const taxRate = 0.08;
-        const taxAmount = subtotal * taxRate;
-        const grandTotal = subtotal + taxAmount;
+        taxAmount = subtotal * taxRate;
+        grandTotal = subtotal + taxAmount;
 
         if (checkoutSubtotalEl) checkoutSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
         if (checkoutTaxEl) checkoutTaxEl.textContent = `$${taxAmount.toFixed(2)}`;
@@ -60,31 +64,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle form submission
     if (checkoutForm) {
-        checkoutForm.addEventListener('submit', (e) => {
+        checkoutForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             if (checkoutCart.length === 0) return;
 
-            // Simulate API call and success
-            showToast('Order Placed!', 'Your order has been successfully placed.', 'success');
+            // Gather form data
+            const formData = new FormData(checkoutForm);
             
-            // Clear cart
-            localStorage.removeItem('cafe_cart');
-            checkoutCart = [];
-            
-            // Re-render UI
-            renderCheckoutCart();
-            
-            // Update global cart UI if cart.js is present
-            if (typeof updateCartUI === 'function') {
-                window.cart = [];
-                updateCartUI();
-            }
+            // Construct payload
+            const payload = {
+                customer: {
+                    firstName: formData.get('first-name'),
+                    lastName: formData.get('last-name'),
+                    company: formData.get('company'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone')
+                },
+                shippingAddress: {
+                    street: formData.get('address'),
+                    address2: formData.get('address-2'),
+                    city: formData.get('city'),
+                    postcode: formData.get('postcode')
+                },
+                notes: formData.get('notes'),
+                items: checkoutCart,
+                totals: {
+                    subtotal: Number(subtotal.toFixed(2)),
+                    tax: Number(taxAmount.toFixed(2)),
+                    total: Number(grandTotal.toFixed(2))
+                },
+                paymentMethod: document.querySelector('input[name="payment"]:checked')?.value || 'credit'
+            };
 
-            // Redirect to home after 2 seconds
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+            try {
+                if (btnPlaceOrder) {
+                    btnPlaceOrder.disabled = true;
+                    btnPlaceOrder.textContent = 'Processing...';
+                }
+
+                const response = await fetch('/api/public/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || 'Checkout failed');
+
+                showToast('Order Placed!', 'Your order has been successfully placed.', 'success');
+                
+                // Clear cart
+                localStorage.removeItem('cafe_cart');
+                checkoutCart = [];
+                
+                // Update global cart UI if cart.js is present
+                if (typeof updateCartUI === 'function') {
+                    window.cart = [];
+                    updateCartUI();
+                }
+
+                // Redirect to home after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+
+            } catch (error) {
+                console.error('Checkout error:', error);
+                showToast('Error', error.message, 'error');
+                
+                if (btnPlaceOrder) {
+                    btnPlaceOrder.disabled = false;
+                    btnPlaceOrder.textContent = 'Place Order';
+                }
+            }
         });
     }
 });
